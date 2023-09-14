@@ -1,4 +1,4 @@
-# Cuisine Culture
+# Calorie Count
 
 ## 💡 Inspiration
 
@@ -21,6 +21,3 @@ Eating a poor quality diet high in junk food is linked to a higher risk of obesi
 - Database: CockroachDB
 - Authentication: Auth0
 
-## 🧠 Challenges we ran into
-
-- To complete the whole project in the given time frame with constraints of exam schedule and poor health of team member.
