@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Add Food | Cuisine Cuture</title>
+    <link rel="stylesheet" href="style.css">
+    <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+        integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+
+</head>
+
+<body>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Poppins", sans-serif;
+        }
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 78px;
+            background: #11101D;
+            padding: 6px 14px;
+            z-index: 99;
+            transition: all 0.5s ease;
+        }
+
+        .sidebar.open {
+            width: 250px;
+        }
+
+        .sidebar .logo-details {
+            height: 60px;
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        .sidebar .logo-details .icon {
+            opacity: 0;
+            transition: all 0.5s ease;
+        }
+
+        .sidebar .logo-details .logo_name {
+            padding-top: 20px;
+            color: #fff;
+            font-size: 20px;
+            font-weight: 600;
+            opacity: 0;
+            transition: all 0.5s ease;
+        }
+
+        .sidebar.open .logo-details .icon,
+        .sidebar.open .logo-details .logo_name {
+            opacity: 1;
+        }
+
+        .sidebar .logo-details #btn {
+            position: absolute;
+            top: 50%;
+            right: 0;
+            transform: translateY(-50%);
+            font-size: 22px;
+            transition: all 0.4s ease;
+            font-size: 23px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.5s ease;
+        }
+
+        .sidebar.open .logo-details #btn {
+            text-align: right;
+        }
+
+        .sidebar i {
+            color: #fff;
+            height: 60px;
+            min-width: 50px;
+            font-size: 28px;
+            text-align: center;
+            line-height: 60px;
+        }
+
+        .sidebar .nav-list {
+            margin-top: 20px;
+            height: 100%;
+        }
+
+        .sidebar li {
+            position: relative;
+            margin: 8px 0;
+            list-style: none;
+        }
+
+        .sidebar li .tooltip {
+            position: absolute;
+            top: -20px;
+            left: calc(100% + 15px);
+            z-index: 3;
+            background: #fff;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 15px;
+            font-weight: 400;
+            opacity: 0;
+            white-space: nowrap;
+            pointer-events: none;
+            transition: 0s;
+        }
+
+        .sidebar li:hover .tooltip {
+            opacity: 1;
+            pointer-events: auto;
+            transition: all 0.4s ease;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .sidebar.open li .tooltip {
+            display: none;
+        }
+
+        .sidebar li a {
+            display: flex;
+            height: 100%;
+            width: 100%;
+            border-radius: 12px;
+            align-items: center;
+            text-decoration: none;
+            transition: all 0.4s ease;
+            background: #11101D;
+        }
+
+        .sidebar li a:hover {
+            background: #FFF;
+        }
+
+        .sidebar li a .links_name {
+            color: #fff;
+            font-size: 15px;
+            font-weight: 400;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: 0.4s;
+        }
+
+        .sidebar.open li a .links_name {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .sidebar li a:hover .links_name,
+        .sidebar li a:hover i {
+            transition: all 0.5s ease;
+            color: #11101D;
+        }
+
+        .sidebar li i {
+            height: 50px;
+            line-height: 50px;
+            font-size: 18px;
+            border-radius: 12px;
+        }
+
+        .sidebar li.profile {
+            position: fixed;
+            height: 60px;
+            width: 78px;
+            left: 0;
+            bottom: -8px;
+            padding: 10px 14px;
+            background: #1d1b31;
+            transition: all 0.5s ease;
+            overflow: hidden;
+        }
+
+        .sidebar .profile #log_out {
+            position: absolute;
+            top: 50%;
+            right: 0;
+            transform: translateY(-50%);
+            background: #1d1b31;
+            width: 100%;
+            height: 60px;
+            line-height: 60px;
+            border-radius: 0px;
+            transition: all 0.5s ease;
+        }
+
+        .sidebar.open .profile #log_out {
+            width: 50px;
+            background: none;
+        }
+
+        .home-section {
+            position: relative;
+            background: #E4E9F7;
+            min-height: 100vh;
+            top: 0;
+            left: 78px;
+            width: calc(100% - 78px);
+            transition: all 0.5s ease;
+            z-index: 2;
+        }
+
+        .sidebar.open~.home-section {
+            left: 250px;
+            width: calc(100% - 250px);
+        }
+
+        .home-section .text {
+            display: inline-block;
+            color: #11101d;
+            font-size: 25px;
+            font-weight: 500;
+            margin: 18px
+        }
+
+        @media (max-width: 420px) {
+            .sidebar li .tooltip {
+                display: none;
+            }
+        }
+    </style>
+    <div class="sidebar">
+        <div class="logo-details">
+            <div class="logo_name">Cuisine Cuture</div>
+            <i class='bx bx-menu' id="btn"></i>
+        </div>
+        <ul class="nav-list">
+            <li>
+                <a href="/">
+                    <i class='bx bx-grid-alt'></i>
+                    <span class="links_name">Dashboard</span>
+                </a>
+                <span class="tooltip">Dashboard</span>
+            </li>
+            <li>
+                <a href="/calories">
+                    <i class='bx bx-calculator'></i>
+                    <span class="links_name">Calorie Calculator</span>
+                </a>
+                <span class="tooltip">Calorie Calculator</span>
+            </li>
+            <li>
+                <a href="/addfood">
+                    <i class='bx bx-list-check'></i>
+                    <span class="links_name">Add Food</span>
+                </a>
+                <span class="tooltip">Add Food</span>
+            </li>
+            <li>
+                <a href="/ingredients">
+                    <i class='bx bx-food-menu'></i>
+                    <span class="links_name">Ingredients</span>
+                </a>
+                <span class="tooltip">Ingredients</span>
+            </li>
+            <li>
+                <a href="/recepies">
+                    <i class='bx bx-book'></i>
+                    <span class="links_name">Recipe</span>
+                </a>
+                <span class="tooltip">Recipe</span>
+            </li>
+            <li>
+                <a href="/exercise">
+                    <i class='bx bx-body'></i>
+                    <span class="links_name">Exercise</span>
+                </a>
+                <span class="tooltip">Exercise</span>
+            </li>
+
+            <li class="profile">
+                <a href="/signout">
+                    <i class='bx bx-log-out' id="log_out"></i>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <section class="home-section">
+        <div class="container" style="padding-top: 50px;">
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title">Add Meal / Food item</span>
+                    <form class="col">
+                        <div class="row">
+                            <div class="input-field col s6">
+                                <input type="text" placeholder="Add Item" id="item-name">
+                                <label for="item-name">Meal</label>
+
+                            </div>
+                            <div class="input-field col s6">
+                                <input type="number" placeholder="Add Calories" id="item-calories">
+                                <label for="item-calories">Calories</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <button class="btn add-btn blue darken-3"><i class="fa fa-plus"></i> Add Meal</button>
+                            <button class="btn update-btn orange"><i class="fa fa-pencil-square-o"></i> Update
+                                Meal</button>
+                            <button class="btn delete-btn red"><i class="fa fa-remove"></i> Delete Meal</button>
+                            <button class="btn back-btn grey pull-right"><i class="fa fa-chevron-circle-left"></i>
+                                Back</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <h3 class="center-align">Total calories: <span class="total-calories">0</span></h3>
+
+            <ul id="item-list" class="collection">
+            </ul>
+
+        </div>
+    </section>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2.2.1/src/js.cookie.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"
+        integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+    <script>
+
+        const StorageCtrl = (function () {
+            return {
+                storeItem: function (item) {
+                    let items;
+                    if (localStorage.getItem("items") === null) {
+                        items = [];
+                        items.push(item);
+                        localStorage.setItem("items", JSON.stringify(items));
+                    } else {
+                        items = JSON.parse(localStorage.getItem("items"));
+                        items.push(item);
+                        localStorage.setItem("items", JSON.stringify(items));
+                    }
+                },
+                getItemFromStorage: function () {
+                    let items;
+                    if (localStorage.getItem("items") === null) {
+                        items = [];
+                    } else {
+                        items = JSON.parse(localStorage.getItem("items"));
+                    }
+                    return items;
+                },
+                updateItemStorage: function (updatedItem) {
+                    let items = JSON.parse(localStorage.getItem("items"));
+                    items.forEach((item, index) => {
+                        if (updatedItem.id === item.id) {
+                            items.splice(index, 1, updatedItem);
+                        }
+                    });
+                    localStorage.setItem("items", JSON.stringify(items));
+                },
+                deleteItemStorage: function (itemToDeleteID) {
+                    let items = JSON.parse(localStorage.getItem("items"));
+                    items.forEach((item, index) => {
+                        if (itemToDeleteID === item.id) {
+                            items.splice(index, 1);
+                        }
+                    });
+                    localStorage.setItem("items", JSON.stringify(items));
+                },
+                removeAllItems: function () {
+                    localStorage.removeItem("items");
+                },
+            };
+        })();
+
+        const ItemCtrl = (function () {
+            const Item = function (name, calories) {
+                this.id = id.next().value;
+                this.calories = calories;
+                this.name = name;
+            };
+
+            function* genID() {
+                let id = 1;
+                while (true) {
+                    yield id++;
+                }
+            }
+            const id = genID();
+
+            const data = {
+                items: StorageCtrl.getItemFromStorage(),
+                currentItem: null,
+                totalCalories: 0,
+            };
+
+            return {
+                getItems: function () {
+                    return data.items;
+                },
+                logData: function () {
+                    return data;
+                },
+                addItem: function (name, calories) {
+                    const newItem = new Item(name, parseInt(calories));
+                    data.items.push(newItem);
+                    return newItem;
+                },
+                getTotCalories: function () {
+                    let cal = 0;
+                    data.items.forEach((item) => {
+                        cal += item.calories;
+                    });
+                    data.totalCalories = cal;
+                    return data.totalCalories;
+                },
+                getItemByID: function (id) {
+                    let found = null;
+                    data.items.forEach((item) => {
+                        if (item.id === id) {
+                            found = item;
+                        }
+                    });
+                    return found;
+                },
+                updateItemByID: function (id, name, calories) {
+                    let updatedItem = null;
+                    data.items.forEach((item) => {
+                        if (item.id === id) {
+                            item.name = name;
+                            item.calories = parseInt(calories);
+                            updatedItem = item;
+                        }
+                    });
+                    return updatedItem;
+                },
+                setCurrentItem: function (item) {
+                    data.currentItem = item;
+                },
+                getCurrentItem: function () {
+                    return data.currentItem;
+                },
+                itemToBeDeleted: function (id) {
+                    const ids = data.items.map((item) => {
+                        return item.id;
+                    });
+                    const index = ids.indexOf(id);
+
+                    data.items.splice(index, 1);
+                },
+                clearAllItems: function () {
+                    data.items = [];
+                },
+            };
+        })();
+
+        const UICrtl = (function () {
+            const UISelectors = {
+                itemList: "#item-list",
+                listItems: "#item-list li",
+                addBtn: ".add-btn",
+                updateBtn: ".update-btn",
+                deleteBtn: ".delete-btn",
+                backBtn: ".back-btn",
+                clearBtn: ".clear-btn",
+                itemNameInput: "#item-name",
+                itemCaloriesInput: "#item-calories",
+                totalCalories: ".total-calories",
+            };
+
+            return {
+                populateItemList: function (items) {
+                    let html = "";
+                    items.forEach((item) => {
+                        html += `<li class="collection-item" id="item-${item.id}">
+              <strong>${item.name}</strong> - <em>${item.calories} calories</em>
+              <a href=3"" class="secondary-content"><i class="edit-item fa fa-pencil"></i></a>
+          </li>`;
+                    });
+                    document.querySelector(UISelectors.itemList).innerHTML = html;
+                },
+                clearEditState: function () {
+                    UICrtl.clearInputs();
+                    document.querySelector(UISelectors.updateBtn).style.display = "none";
+                    document.querySelector(UISelectors.deleteBtn).style.display = "none";
+                    document.querySelector(UISelectors.backBtn).style.display = "none";
+                    document.querySelector(UISelectors.addBtn).style.display = "inline";
+                },
+                showEditState: function () {
+                    document.querySelector(UISelectors.updateBtn).style.display = "inline";
+                    document.querySelector(UISelectors.deleteBtn).style.display = "inline";
+                    document.querySelector(UISelectors.backBtn).style.display = "inline";
+                    document.querySelector(UISelectors.addBtn).style.display = "none";
+                },
+                getSelectors: function () {
+                    return UISelectors;
+                },
+                getItemInput: function () {
+                    return {
+                        name: document.querySelector(UISelectors.itemNameInput).value,
+                        calories: document.querySelector(UISelectors.itemCaloriesInput).value,
+                    };
+                },
+                addListItem(item) {
+                    const li = document.createElement("li");
+                    li.className = "collection-item";
+                    li.id = `item-${item.id}`;
+                    li.innerHTML = `
+      <strong>${item.name}</strong> - <em>${item.calories} calories</em>
+      <a href=3"" class="secondary-content">
+      <i class="edit-item fa fa-pencil"></i></a>`;
+                    document
+                        .querySelector(UISelectors.itemList)
+                        .insertAdjacentElement("beforeend", li);
+                },
+                clearInputs: function () {
+                    document.querySelector(UISelectors.itemNameInput).value = "";
+                    document.querySelector(UISelectors.itemCaloriesInput).value = "";
+                },
+                statusList: function (status) {
+                    document.querySelector(UISelectors.itemList).style.display = status;
+                },
+                updateTotCalories: function (totalCal) {
+                    document.querySelector(UISelectors.totalCalories).innerHTML = totalCal;
+                },
+                addItemToForm: function () {
+                    const currentItem = ItemCtrl.getCurrentItem();
+                    document.querySelector(UISelectors.itemNameInput).value =
+                        currentItem.name;
+                    document.querySelector(UISelectors.itemCaloriesInput).value =
+                        currentItem.calories;
+                    UICrtl.showEditState();
+                },
+                updateListItem: function (item) {
+                    const listItems = document.querySelectorAll("#item-list li");
+                    const listItemsConvert = Array.from(listItems);
+                    listItemsConvert.forEach((li) => {
+                        const liID = li.getAttribute("id");
+                        if (liID === `item-${parseInt(item.id)}`) {
+                            li.innerHTML = `
+            <strong>${item.name}</strong> - <em>${item.calories} calories</em>
+            <a href=3"" class="secondary-content">
+            <i class="edit-item fa fa-pencil"></i></a>`;
+                        }
+                    });
+                },
+                removeLiItem: function (id) {
+                    const itemID = `#item-${id}`;
+                    const item = document.querySelector(itemID);
+                    item.remove();
+                },
+                removeAllItems: function () {
+                    const items = document.getElementById("item-list");
+                    items.innerHTML = "";
+                },
+            };
+        })();
+
+        const App = (function (ItemCtrl, StorageCtrl, UICrtl) {
+            const loadEventListeners = function () {
+                const UISelectors = UICrtl.getSelectors();
+
+                document
+                    .querySelector(UISelectors.addBtn)
+                    .addEventListener("click", itemAddSubmit);
+
+                document
+                    .querySelector(UISelectors.itemList)
+                    .addEventListener("click", itemEditClick);
+
+                document
+                    .querySelector(UISelectors.updateBtn)
+                    .addEventListener("click", itemUpdateSubmit);
+
+                document
+                    .querySelector(UISelectors.backBtn)
+                    .addEventListener("click", function (e) {
+                        UICrtl.clearEditState();
+                        e.preventDefault();
+                    });
+
+                document
+                    .querySelector(UISelectors.deleteBtn)
+                    .addEventListener("click", deleteItem);
+
+                document
+                    .querySelector(UISelectors.clearBtn)
+                    .addEventListener("click", clearAllItem);
+
+                document.addEventListener("keypress", function (e) {
+                    if (e.keyCode === 13 || e.which === 13) {
+                        e.preventDefault();
+                        return false;
+                    }
+                });
+            };
+            const itemAddSubmit = function (e) {
+                const input = UICrtl.getItemInput();
+                if (input.name !== "" && input.calories !== "") {
+                    const newItem = ItemCtrl.addItem(input.name, input.calories);
+
+                    UICrtl.addListItem(newItem);
+
+                    const totalCal = ItemCtrl.getTotCalories();
+
+                    UICrtl.updateTotCalories(totalCal);
+
+                    UICrtl.statusList("block");
+                    StorageCtrl.storeItem(newItem);
+
+                    UICrtl.clearInputs();
+                }
+
+                e.preventDefault();
+            };
+
+            const itemEditClick = function (e) {
+                if (e.target.classList.contains("edit-item")) {
+                    const listID = e.target.parentNode.parentNode.id;
+
+                    const listIdArr = listID.split("-");
+                    const id = parseInt(listIdArr[1]);
+
+                    const itemToEdit = ItemCtrl.getItemByID(id);
+
+                    ItemCtrl.setCurrentItem(itemToEdit);
+
+                    UICrtl.addItemToForm();
+                }
+                e.preventDefault();
+            };
+
+            const itemUpdateSubmit = function (e) {
+                const input = UICrtl.getItemInput();
+                const itemId = ItemCtrl.getCurrentItem().id;
+
+                const updatedItemSubmit = ItemCtrl.updateItemByID(
+                    itemId,
+                    input.name,
+                    input.calories
+                );
+
+                UICrtl.updateListItem(updatedItemSubmit);
+
+                const totalCal = ItemCtrl.getTotCalories();
+
+                UICrtl.updateTotCalories(totalCal);
+
+                UICrtl.clearEditState();
+
+                StorageCtrl.updateItemStorage(updatedItemSubmit);
+
+                UICrtl.clearInputs();
+
+                e.preventDefault();
+            };
+
+            const deleteItem = function (e) {
+                const itemToDeleteID = ItemCtrl.getCurrentItem().id;
+
+                ItemCtrl.itemToBeDeleted(itemToDeleteID);
+
+                UICrtl.removeLiItem(itemToDeleteID);
+
+                const totalCal = ItemCtrl.getTotCalories();
+
+                UICrtl.updateTotCalories(totalCal);
+
+                StorageCtrl.deleteItemStorage(itemToDeleteID);
+
+                UICrtl.clearEditState();
+
+                e.preventDefault();
+            };
+
+            const clearAllItem = function (e) {
+                ItemCtrl.clearAllItems();
+
+                UICrtl.removeAllItems();
+
+                StorageCtrl.removeAllItems();
+
+                const totalCal = ItemCtrl.getTotCalories();
+
+                UICrtl.updateTotCalories(totalCal);
+
+                UICrtl.statusList("none");
+
+                e.preventDefault();
+            };
+
+            return {
+                init: function () {
+                    UICrtl.clearEditState();
+
+                    const items = ItemCtrl.getItems();
+
+                    const totalCal = ItemCtrl.getTotCalories();
+                    UICrtl.updateTotCalories(totalCal);
+
+                    if (items.length === 0) {
+                        UICrtl.statusList("none");
+                    } else {
+                        UICrtl.populateItemList(items);
+                    }
+
+                    loadEventListeners();
+                },
+            };
+        })(ItemCtrl, StorageCtrl, UICrtl);
+
+        App.init();
+
+        function imgsplit() {
+            $("#splitform").append("<input type = 'file' name = 'myfile' id='myfile'>")
+            $("#mos").val('1');
+            $("#myfile").attr('value', '1')
+
+        }
+        function ammsplit() {
+            $("#splitform").append('<input type="text" placeholder="Amount of bill" name="ammount">')
+            $("#mos").attr('value', '2');
+        }
+        let sidebar = document.querySelector(".sidebar");
+        let closeBtn = document.querySelector("#btn");
+        let searchBtn = document.querySelector(".bx-search");
+
+        closeBtn.addEventListener("click", () => {
+            sidebar.classList.toggle("open");
+            menuBtnChange();
+        });
+
+        searchBtn.addEventListener("click", () => {
+            sidebar.classList.toggle("open");
+            menuBtnChange();
+        });
+
+        console.log(Cookies.get('csrftoken'));
+
+    </script>
+</body>
+
+</html>
